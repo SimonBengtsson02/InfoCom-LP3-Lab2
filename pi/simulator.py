@@ -3,7 +3,8 @@ import requests
 import argparse
 
 def getMovement(src, dst):
-    speed = 0.00001
+
+    speed = 0.00003
     dst_x, dst_y = dst
     x, y = src
     direction = math.sqrt((dst_x - x)**2 + (dst_y - y)**2)
@@ -18,6 +19,7 @@ def moveDrone(src, d_long, d_la):
     return (x, y)
 
 def run(id, current_coords, from_coords, to_coords, SERVER_URL):
+    print("rörsig")
     drone_coords = current_coords
     d_long, d_la =  getMovement(drone_coords, from_coords)
     while ((from_coords[0] - drone_coords[0])**2 + (from_coords[1] - drone_coords[1])**2)*10**6 > 0.0002:
@@ -46,12 +48,10 @@ def run(id, current_coords, from_coords, to_coords, SERVER_URL):
                           'status': 'idle'
                          }
             resp = session.post(SERVER_URL, json=drone_info)
-    print("HEJ")
+    with open('coords.txt', 'w') as file:
+        file.write(str(drone_coords[0]) + '\n')
+        file.write(str(drone_coords[1]) + '\n')
 
-    with open("cords.txt", "w") as file:
-        file.write(drone_coords[0] + "\n")
-        file.write(drone_coords[1]+ "\n")
-        file.close()
     return drone_coords[0], drone_coords[1]
    
 if __name__ == "__main__":
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--tlat", help ='latitude of input [to address]' ,type=float)
     parser.add_argument("--id", help ='drones ID' ,type=str)
     args = parser.parse_args()
-
+    print(args.clong)
     current_coords = (args.clong, args.clat)
     from_coords = (args.flong, args.flat)
     to_coords = (args.tlong, args.tlat)
@@ -78,3 +78,4 @@ if __name__ == "__main__":
     drone_long, drone_lat = run(args.id ,current_coords, from_coords, to_coords, SERVER_URL)
     # drone_long and drone_lat is the final location when drlivery is completed, find a way save the value, and use it for the initial coordinates of next delivery
     #=============================================================================
+    

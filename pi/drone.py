@@ -16,15 +16,12 @@ myID = "drone2"
 
 # Get initial longitude and latitude the drone
 #===================================================================
-current_longitude = 13.1956736
-current_latitude = 55.7088768
+with open("coords.txt", 'r') as file:
+    lines = file.readlines()
 
-with open("coords.txt", "w") as file:
-    file.write(str(current_longitude))
-    file.write('\n')
-    file.write(str(current_latitude))
-    file.close()
-
+    #===================================================================
+current_longitude = float(lines[0].strip())
+current_latitude = float(lines[1].strip())
 #===================================================================
 
 drone_info = {'id': myID,
@@ -43,11 +40,9 @@ with requests.Session() as session:
 @app.route('/', methods=['POST'])
 def main():
     coords = request.json
+    print(coords)
     # Get current longitude and latitude of the drone 
-    #===================================================================
-    current_longitude = coords['current'][0]
-    current_latitude = coords['current'][1]
-    print(current_longitude)
+   
     #===================================================================
     from_coord = coords['from']
     to_coord = coords['to']
@@ -59,4 +54,4 @@ def main():
     return 'New route received'
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+	 app.run(debug=True, host='0.0.0.0')
