@@ -16,11 +16,15 @@ myID = "drone2"
 
 # Get initial longitude and latitude the drone
 #===================================================================
-with open("cords.txt", "r") as file:
-    lines = file.readLines()
+current_longitude = 13.1956736
+current_latitude = 55.7088768
 
-current_longitude = float(lines[0].strip())
-current_latitude = float(lines[1].strip())
+with open("coords.txt", "w") as file:
+    file.write(str(current_longitude))
+    file.write('\n')
+    file.write(str(current_latitude))
+    file.close()
+
 #===================================================================
 
 drone_info = {'id': myID,
@@ -41,6 +45,9 @@ def main():
     coords = request.json
     # Get current longitude and latitude of the drone 
     #===================================================================
+    current_longitude = coords['current'][0]
+    current_latitude = coords['current'][1]
+    print(current_longitude)
     #===================================================================
     from_coord = coords['from']
     to_coord = coords['to']
